@@ -1,0 +1,27 @@
+{{- if and .Values.geoserver.persistence.enabled (not .Values.geoserver.persistence.existingClaim) -}}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "fullname" . }}-geoserver
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "fullname" . }}-geoserver
+  accessModes:
+    - {{ .Values.geoserver.persistence.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.geoserver.persistence.size | quote }}
+{{- if .Values.geoserver.persistence.storageClass }}
+{{- if (eq "-" .Values.geoserver.persistence.storageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: "{{ .Values.persistence.storageClass }}"
+{{- end }}
+{{- end }}
+{{- end -}}

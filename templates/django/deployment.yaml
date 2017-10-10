@@ -1,0 +1,84 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}-django
+  labels:
+    app: {{ template "name" . }}-django
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}-django
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-django
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
+          command: ["/start.sh"]
+          ports:
+            - containerPort: {{ .Values.service.internalPort }}
+          env:
+          - name: DJANGO_SETTINGS_MODULE
+            value: njcoast.settings
+          - name: DATABASE_USER
+            value: {{ default "postgres" .Values.postgresql.postgresUser | quote }}
+          - name: DATABASE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-postgresql
+                key: postgres-password
+          - name: DATABASE_HOST
+            value: "{{ template "fullname" . }}-postgresql"
+          - name: DATABASE_PORT
+            value: {{ default 5432 .Values.postgresql.service.port | quote }}
+          - name: DATABASE_NAME
+            value: {{ default "postgres" .Values.postgresql.postgresDatabase | quote }}
+          - name: ALLOWED_HOSTS
+            value: '[''django'',]'
+          - name: C_FORCE_ROOT
+            value: "1"
+          - name: GEOSERVER_PUBLIC_LOCATION
+            value: http://{{ .Values.ingress.host }}/geoserver/
+          - name: GEOSERVER_LOCATION
+            value: http://{{ .Values.ingress.host }}/geoserver/
+          - name: SITEURL
+            value: http://{{ .Values.ingress.host }}/
+          - name: BROKER_URL
+            value: amqp://guest:guest@rabbitmq:5672/
+        - name: {{ .Chart.Name }}-celary
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
+          command: ["celery","worker","--app=geonode.celery_app:app","-B","-l","INFO"]
+          env:
+          - name: DJANGO_SETTINGS_MODULE
+            value: njcoast.settings
+          - name: DATABASE_USER
+            value: {{ default "postgres" .Values.postgresql.postgresUser | quote }}
+          - name: DATABASE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-postgresql
+                key: postgres-password
+          - name: DATABASE_HOST
+            value: "{{ template "fullname" . }}-postgresql"
+          - name: DATABASE_PORT
+            value: {{ default 5432 .Values.postgresql.service.port | quote }}
+          - name: DATABASE_NAME
+            value: {{ default "postgres" .Values.postgresql.postgresDatabase | quote }}
+          - name: ALLOWED_HOSTS
+            value: '[''django'',]'
+          - name: C_FORCE_ROOT
+            value: "1"
+          - name: GEOSERVER_PUBLIC_LOCATION
+            value: http://{{ .Values.ingress.host }}/geoserver/
+          - name: GEOSERVER_LOCATION
+            value: http://{{ .Values.ingress.host }}/geoserver/
+          - name: SITEURL
+            value: http://{{ .Values.ingress.host }}/
+          - name: BROKER_URL
+            value: amqp://guest:guest@rabbitmq:5672/

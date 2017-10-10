@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}-geoserver
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}-geoserver
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: gcr.io/njcoast-174716/geoserver
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PUBLIC_PORT
+          value: "80"
+        - name: DJANGO_URL
+          value: http://{{ .Values.ingress.host }}/
+        - name: GEOSERVER_PUBLIC_LOCATION
+          value: http://{{ .Values.ingress.host }}/geoserver/
+        - name: GEOSERVER_LOCATION
+          value: http://{{ .Values.ingress.host }}/geoserver/
+        - name: GEOSERVER_DATA_DIR
+          value: /geoserver_data/data
+        - name: SITEURL
+          value: http://{{ .Values.ingress.host }}/geoserver/
+        volumeMounts:
+        - name: geoserverdata
+          mountPath: /geoserver_data/data
+      volumes:
+      - name: geoserverdata
+      {{- if .Values.geoserver.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.geoserver.persistence.existingClaim | default (include "geoserver" .) }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
