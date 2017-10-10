@@ -54,7 +54,7 @@ postgresql:
   ## Default: postgres
   postgresUser: njcoast
   ## Default: random 10 character string
-  # postgresPassword:
+  postgresPassword: test
 
   ## Create a database
   ## Default: the postgres user
@@ -103,17 +103,12 @@ rabbitmq:
   ## RabbitMQ application password
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq/blob/master/README.md#creating-a-database-user-on-first-run
   ##
-  # rabbitmqPassword:
+  rabbitmqPassword: test
 
   ## Node port
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
   rabbitmqNodePort: 5672
-
-  ## Node Name
-  ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
-  ##
-  rabbitmqNodeName: rabbit
 
   ## Kubernetes service type
   serviceType: ClusterIP
