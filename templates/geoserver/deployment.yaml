@@ -17,7 +17,8 @@ spec:
     spec:
       containers:
       - name: {{ .Chart.Name }}
-        image: gcr.io/njcoast-174716/geoserver
+        image: "{{ .Values.geoserver.image.repository }}:{{ .Values.geoserver.image.tag }}"
+        imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         ports:
         - containerPort: 8080
         env:

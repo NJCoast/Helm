@@ -34,6 +34,10 @@ resources: {}
   #  memory: 128Mi
 
 geoserver:
+  image:
+    repository: gcr.io/njcoast-174716/geoserver
+    tag: test
+
   service:
     type: ClusterIP
     internalPort: 8080
@@ -44,7 +48,7 @@ geoserver:
     # existingClaim:
     # storageClass: "-"
     accessMode: ReadWriteOnce
-    size: 10Gi
+    size: 1Gi
 
 postgresql:
   image: "postgres"
