@@ -19,21 +19,23 @@ spec:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.geoserver.image.repository }}:{{ .Values.geoserver.image.tag }}"
         imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
         ports:
         - containerPort: 8080
         env:
         - name: PUBLIC_PORT
           value: "80"
         - name: DJANGO_URL
-          value: http://{{ .Values.ingress.host }}/
+          value: http://{{ .Values.ingress.hosts | first }}/
         - name: GEOSERVER_PUBLIC_LOCATION
-          value: http://{{ .Values.ingress.host }}/geoserver/
+          value: http://{{ .Values.ingress.hosts | first }}/geoserver/
         - name: GEOSERVER_LOCATION
-          value: http://{{ .Values.ingress.host }}/geoserver/
+          value: http://{{ .Values.ingress.hosts | first }}/geoserver/
         - name: GEOSERVER_DATA_DIR
           value: /geoserver_data/data
         - name: SITEURL
-          value: http://{{ .Values.ingress.host }}/geoserver/
+          value: http://{{ .Values.ingress.hosts | first }}/geoserver/
         volumeMounts:
         - name: geoserverdata
           mountPath: /geoserver_data/data
