@@ -12,7 +12,7 @@ spec:
   ports:
     - port: {{ .Values.service.internalPort }}
       {{ if ne .Values.service.type "NodePort" }}
-      targetPort: {{ .Values.service.targetPort }}
+      targetPort: {{ .Values.service.externalPort }}
       {{ end }}
       protocol: TCP
   selector:

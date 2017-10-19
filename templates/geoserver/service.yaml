@@ -12,7 +12,7 @@ spec:
   ports:
     - port: {{ .Values.geoserver.service.internalPort }}
       {{ if ne .Values.geoserver.service.type "NodePort" }}
-      targetPort: {{ .Values.geoserver.service.targetPort }}
+      targetPort: {{ .Values.geoserver.service.externalPort }}
       {{ end }}
       protocol: TCP
   selector:
