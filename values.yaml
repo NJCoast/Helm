@@ -5,13 +5,14 @@ image:
 imagePullPolicy: Always
 
 service:
-  type: ClusterIP
+  type: NodePort
   internalPort: 8000
   externalPort: 8000
 
 ingress:
   enabled: true
-  host: njcoast.web.james-sweet.com
+  hosts:
+    - njcoast.local
   annotations:
     kubernetes.io/ingress.class: nginx
     #kubernetes.io/tls-acme: "true"
@@ -36,10 +37,10 @@ resources: {}
 geoserver:
   image:
     repository: gcr.io/njcoast-174716/geoserver
-    tag: test
+    tag: test-2.10
 
   service:
-    type: ClusterIP
+    type: NodePort
     internalPort: 8080
     externalPort: 8080
 
@@ -56,7 +57,7 @@ postgresql:
 
   ## Create a database user
   ## Default: postgres
-  postgresUser: njcoast
+  postgresUser: postgres
   ## Default: random 10 character string
   postgresPassword: test
 
