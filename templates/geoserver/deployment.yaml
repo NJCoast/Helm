@@ -15,6 +15,10 @@ spec:
         app: {{ template "fullname" . }}-geoserver
         release: {{ .Release.Name }}
     spec:
+      {{- if .Values.geoserver.image.secret }}
+      imagePullSecrets: 
+        - name: {{ .Values.geoserver.image.secret }}
+      {{- end }}
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.geoserver.image.repository }}:{{ .Values.geoserver.image.tag }}"

@@ -15,6 +15,10 @@ spec:
         app: {{ template "fullname" . }}-django
         release: {{ .Release.Name }}
     spec:
+      {{- if .Values.image.secret }}
+      imagePullSecrets: 
+        - name: {{ .Values.image.secret }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}-django
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
