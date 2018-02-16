@@ -18,5 +18,15 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           image: elasticsearch
+          resources:
+            limits:
+              cpu: 100m
+              memory: 768Mi
+            requests:
+              cpu: 100m
+              memory: 512Mi
+          env:
+            - name: ES_JAVA_OPTS
+              value: "-Xms512m -Xmx512m"
           ports:
             - containerPort: 9200
