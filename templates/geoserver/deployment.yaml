@@ -27,6 +27,12 @@ spec:
 {{ toYaml .Values.resources | indent 10 }}
         ports:
         - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /geoserver/
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
         env:
         - name: PUBLIC_PORT
           value: "80"
