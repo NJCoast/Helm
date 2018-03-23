@@ -34,6 +34,13 @@ resources: {}
   #  cpu: 100m
   #  memory: 128Mi
 
+persistence:
+  enabled: true
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 5Gi
+  # existingClaim:
+
 geoserver:
   image:
     repository: gcr.io/njcoast-174716/geoserver
