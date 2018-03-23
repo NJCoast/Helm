@@ -46,12 +46,21 @@ spec:
             value: '[''django'',]'
           - name: C_FORCE_ROOT
             value: "1"
+          {{- if .Values.ingress.tls }}
+          - name: GEOSERVER_PUBLIC_LOCATION
+            value: https://{{ .Values.ingress.hosts | first }}/geoserver/
+          - name: GEOSERVER_LOCATION
+            value: https://{{ .Values.ingress.hosts | first }}/geoserver/
+          - name: SITEURL
+            value: https://{{ .Values.ingress.hosts | first }}/
+          {{- else}}
           - name: GEOSERVER_PUBLIC_LOCATION
             value: http://{{ .Values.ingress.hosts | first }}/geoserver/
           - name: GEOSERVER_LOCATION
             value: http://{{ .Values.ingress.hosts | first }}/geoserver/
           - name: SITEURL
             value: http://{{ .Values.ingress.hosts | first }}/
+          {{- end}}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
         - name: {{ .Chart.Name }}-celary
@@ -78,12 +87,21 @@ spec:
             value: '[''django'',]'
           - name: C_FORCE_ROOT
             value: "1"
+          {{- if .Values.ingress.tls }}
+          - name: GEOSERVER_PUBLIC_LOCATION
+            value: httsp://{{ .Values.ingress.hosts | first }}/geoserver/
+          - name: GEOSERVER_LOCATION
+            value: https://{{ .Values.ingress.hosts | first }}/geoserver/
+          - name: SITEURL
+            value: https://{{ .Values.ingress.hosts | first }}/
+          {{- else}}
           - name: GEOSERVER_PUBLIC_LOCATION
             value: http://{{ .Values.ingress.hosts | first }}/geoserver/
           - name: GEOSERVER_LOCATION
             value: http://{{ .Values.ingress.hosts | first }}/geoserver/
           - name: SITEURL
             value: http://{{ .Values.ingress.hosts | first }}/
+          {{- end}}
           - name: BROKER_USER
             value: {{ default "user" .Values.rabbitmq.rabbitmqUsername | quote }}
           - name: BROKER_PASS

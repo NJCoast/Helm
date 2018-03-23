@@ -36,16 +36,27 @@ spec:
         env:
         - name: PUBLIC_PORT
           value: "80"
+        - name: GEOSERVER_DATA_DIR
+          value: /geoserver_data/data
+        {{- if .Values.ingress.tls }}
+        - name: DJANGO_URL
+          value: https://{{ .Values.ingress.hosts | first }}/
+        - name: GEOSERVER_PUBLIC_LOCATION
+          value: https://{{ .Values.ingress.hosts | first }}/geoserver/
+        - name: GEOSERVER_LOCATION
+          value: https://{{ .Values.ingress.hosts | first }}/geoserver/
+        - name: SITEURL
+          value: https://{{ .Values.ingress.hosts | first }}/geoserver/
+        {{- else }}
         - name: DJANGO_URL
           value: http://{{ .Values.ingress.hosts | first }}/
         - name: GEOSERVER_PUBLIC_LOCATION
           value: http://{{ .Values.ingress.hosts | first }}/geoserver/
         - name: GEOSERVER_LOCATION
           value: http://{{ .Values.ingress.hosts | first }}/geoserver/
-        - name: GEOSERVER_DATA_DIR
-          value: /geoserver_data/data
         - name: SITEURL
           value: http://{{ .Values.ingress.hosts | first }}/geoserver/
+        {{- end }}
         volumeMounts:
         - name: geoserverdata
           mountPath: /geoserver_data/data
