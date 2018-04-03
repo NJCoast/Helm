@@ -36,6 +36,14 @@ spec:
           backend:
             serviceName: {{ template "fullname" $ }}-geoserver
             servicePort: {{ $.Values.geoserver.service.externalPort }}
+        - path: /queue
+          backend:
+            serviceName: {{ template "fullname" $ }}-queue-master
+            servicePort: {{ $.Values.queue.service.externalPort }}
+        - path: /queue/*
+          backend:
+            serviceName: {{ template "fullname" $ }}-queue-master
+            servicePort: {{ $.Values.queue.service.externalPort }}
     {{- end }}
   {{- if .Values.ingress.tls }}
   tls:

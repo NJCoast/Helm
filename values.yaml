@@ -15,7 +15,6 @@ ingress:
     - njcoast.local
   annotations:
     kubernetes.io/ingress.class: nginx
-    #kubernetes.io/tls-acme: "true"
   tls:
     # Secrets must be manually created in the namespace.
     # - secretName: chart-example-tls
@@ -23,10 +22,6 @@ ingress:
     #     - chart-example.local
 
 resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   # limits:
   #  cpu: 100m
   #  memory: 128Mi
@@ -40,6 +35,48 @@ persistence:
   accessMode: ReadWriteOnce
   size: 5Gi
   # existingClaim:
+
+aws:
+  id: "AWSID"
+  key: "AWSKEY"
+
+queue:
+  image:
+    repository: simulation-queue
+    tag: latest
+    # secret: 
+    pullPolicy: Always
+
+  resources: {}
+    # limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    # requests:
+    #  cpu: 100m
+    #  memory: 128Mi
+  
+  worker:
+    image:
+      repository: simulation-queue
+      tag: worker
+      # secret: 
+      pullPolicy: Always
+
+    resources: {}
+    # limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    # requests:
+    #  cpu: 100m
+    #  memory: 128Mi
+
+    autoscale:
+      enabled: false
+      minimum: 1
+      maximum: 4
+
+  service:
+    type: ClusterIP
 
 geoserver:
   image:
@@ -64,32 +101,13 @@ postgresql:
   image: "postgres"
   imageTag: "9.6.2"
 
-  ## Create a database user
-  ## Default: postgres
   postgresUser: postgres
-  ## Default: random 10 character string
   postgresPassword: test
-
-  ## Create a database
-  ## Default: the postgres user
   # postgresDatabase:
 
-  ## Persist data to a persitent volume
   persistence:
     enabled: false
-
-    ## A manually managed Persistent Volume and Claim
-    ## Requires persistence.enabled: true
-    ## If defined, PVC must be created manually before volume will be bound
     # existingClaim:
-
-    ## database data Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
     # storageClass: "-"
     accessMode: ReadWriteOnce
     size: 8Gi
@@ -97,9 +115,6 @@ postgresql:
   metrics:
     enabled: false
 
-  ## Configure resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
   resources:
     requests:
       memory: 256Mi
@@ -108,23 +123,12 @@ postgresql:
   service:
     type: ClusterIP
     port: 5432
+
 rabbitmq:
-  ## RabbitMQ application username
-  ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq/blob/master/README.md#creating-a-database-user-on-first-run
-  ##
   rabbitmqUsername: user
-
-  ## RabbitMQ application password
-  ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq/blob/master/README.md#creating-a-database-user-on-first-run
-  ##
   rabbitmqPassword: test
-
-  ## Node port
-  ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
-  ##
   rabbitmqNodePort: 5672
 
-  ## Kubernetes service type
   serviceType: ClusterIP
 
   persistence:
