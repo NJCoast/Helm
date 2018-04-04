@@ -1,0 +1,23 @@
+{{- if .Values.queue.worker.autoscale.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ template "fullname" . }}-queue-worker
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: {{ template "fullname" . }}-queue-worker
+  minReplicas: {{ default 1 .Values.queue.worker.autoscale.minimum }}
+  maxReplicas: {{ default 4 .Values.queue.worker.autoscale.maximum }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: 80
+{{- end }}

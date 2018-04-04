@@ -1,0 +1,40 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}-queue-master
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}-queue-master
+        release: {{ .Release.Name }}
+    spec:
+      {{- if .Values.queue.image.secret }}
+      imagePullSecrets: 
+        - name: {{ .Values.queue.image.secret }}
+      {{- end }}
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.queue.image.repository }}:{{ .Values.queue.image.tag }}"
+        imagePullPolicy: {{ default "" .Values.queue.pullPolicy | quote }}
+        resources:
+{{ toYaml .Values.queue.resources | indent 10 }}
+        ports:
+        - containerPort: 9090
+        env:
+        - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: {{ .Release.Name }}-aws
+            key: AWS_ACCESS_KEY_ID
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-aws
+              key: AWS_SECRET_ACCESS_KEY

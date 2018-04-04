@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "fullname" . }}-queue
+  labels:
+    app: {{ template "name" . }}-queue
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.queue.service.type }}
+  ports:
+    - port: 9090
+      protocol: TCP
+  selector:
+    app: {{ template "fullname" . }}-queue
+    release: {{ .Release.Name }}
