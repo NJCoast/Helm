@@ -19,5 +19,5 @@ spec:
   - type: Resource
     resource:
       name: cpu
-      targetAverageUtilization: 80
+      targetAverageUtilization: {{ default 50 .Values.queue.worker.autoscale.targetcpu }}
 {{- end }}

@@ -21,17 +21,23 @@ spec:
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.queue.worker.image.repository }}:{{ .Values.queue.worker.image.tag }}"
-        imagePullPolicy: {{ default "" .Values.queue.worker.pullPolicy | quote }}
+        imagePullPolicy: {{ default "" .Values.queue.worker.image.pullPolicy | quote }}
         resources:
-{{ toYaml .Values.queue.resources | indent 10 }}
+{{ toYaml .Values.queue.worker.resources | indent 10 }}
         env:
         - name: AWS_ACCESS_KEY_ID
-        valueFrom:
-          secretKeyRef:
-            name: {{ .Release.Name }}-aws
-            key: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}-aws
+              key: AWS_ACCESS_KEY_ID
         - name: AWS_SECRET_ACCESS_KEY
           valueFrom:
             secretKeyRef:
-              name: {{ .Release.Name }}-aws
+              name: {{ template "fullname" . }}-aws
               key: AWS_SECRET_ACCESS_KEY
+        - name: SERVER_HOSTNAME
+          value: {{ .Values.ingress.hosts | first }}
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name

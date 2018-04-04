@@ -22,19 +22,19 @@ spec:
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.queue.image.repository }}:{{ .Values.queue.image.tag }}"
-        imagePullPolicy: {{ default "" .Values.queue.pullPolicy | quote }}
+        imagePullPolicy: {{ default "" .Values.queue.image.pullPolicy | quote }}
         resources:
 {{ toYaml .Values.queue.resources | indent 10 }}
         ports:
         - containerPort: 9090
         env:
         - name: AWS_ACCESS_KEY_ID
-        valueFrom:
-          secretKeyRef:
-            name: {{ .Release.Name }}-aws
-            key: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}-aws
+              key: AWS_ACCESS_KEY_ID
         - name: AWS_SECRET_ACCESS_KEY
           valueFrom:
             secretKeyRef:
-              name: {{ .Release.Name }}-aws
+              name: {{ template "fullname" . }}-aws
               key: AWS_SECRET_ACCESS_KEY

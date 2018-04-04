@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "fullname" . }}-queue
+  name: {{ template "fullname" . }}-queue-master
   labels:
-    app: {{ template "name" . }}-queue
+    app: {{ template "name" . }}-queue-master
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -13,5 +13,5 @@ spec:
     - port: 9090
       protocol: TCP
   selector:
-    app: {{ template "fullname" . }}-queue
+    app: {{ template "fullname" . }}-queue-master
     release: {{ .Release.Name }}
