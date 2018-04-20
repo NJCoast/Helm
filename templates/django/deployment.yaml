@@ -64,6 +64,10 @@ spec:
           - name: SITEURL
             value: http://{{ .Values.ingress.hosts | first }}/
           {{- end}}
+          - name: SIMULATION_BUCKET
+            value: '{{ .Values.simulation.location }}'
+          - name: USER_SIMULATION_BUCKET
+            value: '{{ .Values.simulation.path }}'
           resources:
 {{ toYaml .Values.resources | indent 12 }}
         - name: {{ .Chart.Name }}-celary

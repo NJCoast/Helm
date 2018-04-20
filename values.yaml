@@ -40,6 +40,10 @@ aws:
   id: "AWSID"
   key: "AWSKEY"
 
+simulation:
+  location: "https://s3.amazonaws.com/simulation.njcoast.us"
+  path: "simulation"
+
 queue:
   image:
     repository: simulation-queue
