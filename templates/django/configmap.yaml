@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}-env
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  DJANGO_SETTINGS_MODULE: njcoast.settings
+  DATABASE_USER: {{ default "postgres" .Values.postgresql.postgresUser | quote }}
+  DATABASE_HOST: "{{ .Release.Name }}-postgresql"
+  DATABASE_PORT: {{ default 5432 .Values.postgresql.service.port | quote }}
+  DATABASE_NAME: {{ default "postgres" .Values.postgresql.postgresDatabase | quote }}
+  ALLOWED_HOSTS: '[''django'',]'
+  C_FORCE_ROOT: "1"
+  {{- if .Values.ingress.tls }}
+  GEOSERVER_PUBLIC_LOCATION: https://{{ .Values.ingress.hosts | first }}/geoserver/
+  GEOSERVER_LOCATION: https://{{ .Values.ingress.hosts | first }}/geoserver/
+  SITEURL: https://{{ .Values.ingress.hosts | first }}/
+  {{- else}}
+  GEOSERVER_PUBLIC_LOCATION: http://{{ .Values.ingress.hosts | first }}/geoserver/
+  GEOSERVER_LOCATION: http://{{ .Values.ingress.hosts | first }}/geoserver/
+  SITEURL: http://{{ .Values.ingress.hosts | first }}/
+  {{- end}}
+  SIMULATION_BUCKET: '{{ .Values.simulation.location }}'
+  USER_SIMULATION_BUCKET: '{{ .Values.simulation.path }}'
+  BROKER_USER: {{ default "user" .Values.rabbitmq.rabbitmqUsername | quote }}
+  BROKER_HOST: "{{ .Release.Name }}-rabbitmq"
+  BROKER_PORT: {{ default 5672 .Values.rabbitmq.rabbitmqNodePort | quote }}
