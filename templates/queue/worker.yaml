@@ -25,6 +25,16 @@ spec:
         resources:
 {{ toYaml .Values.queue.worker.resources | indent 10 }}
         env:
+        - name: HTTP_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}-aws
+              key: USER_NAME
+        - name: HTTP_PASS
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}-aws
+              key: USER_PASS
         - name: AWS_ACCESS_KEY_ID
           valueFrom:
             secretKeyRef:
