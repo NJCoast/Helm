@@ -24,7 +24,7 @@ spec:
         image: "{{ .Values.geoserver.image.repository }}:{{ .Values.geoserver.image.tag }}"
         imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
         resources:
-{{ toYaml .Values.resources | indent 10 }}
+{{ toYaml .Values.geoserver.resources | indent 10 }}
         ports:
         - containerPort: 8080
         readinessProbe:
