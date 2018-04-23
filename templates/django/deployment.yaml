@@ -23,103 +23,41 @@ spec:
         - name: {{ .Chart.Name }}-django
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
-          command: ["/start.sh"]
+          command: ["/entrypoint.sh"]
           ports:
             - containerPort: {{ .Values.service.internalPort }}
           volumeMounts:
           - name: uploads
             mountPath: /usr/local/src/geonode/geonode/uploaded
+          envFrom:
+          - configMapRef:
+              name: {{ template "fullname" . }}-env
           env:
-          - name: DJANGO_SETTINGS_MODULE
-            value: njcoast.settings
-          - name: DATABASE_USER
-            value: {{ default "postgres" .Values.postgresql.postgresUser | quote }}
           - name: DATABASE_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: {{ .Release.Name }}-postgresql
                 key: postgres-password
-          - name: DATABASE_HOST
-            value: "{{ .Release.Name }}-postgresql"
-          - name: DATABASE_PORT
-            value: {{ default 5432 .Values.postgresql.service.port | quote }}
-          - name: DATABASE_NAME
-            value: {{ default "postgres" .Values.postgresql.postgresDatabase | quote }}
-          - name: ALLOWED_HOSTS
-            value: '[''django'',]'
-          - name: C_FORCE_ROOT
-            value: "1"
-          {{- if .Values.ingress.tls }}
-          - name: GEOSERVER_PUBLIC_LOCATION
-            value: https://{{ .Values.ingress.hosts | first }}/geoserver/
-          - name: GEOSERVER_LOCATION
-            value: https://{{ .Values.ingress.hosts | first }}/geoserver/
-          - name: SITEURL
-            value: https://{{ .Values.ingress.hosts | first }}/
-          {{- else}}
-          - name: GEOSERVER_PUBLIC_LOCATION
-            value: http://{{ .Values.ingress.hosts | first }}/geoserver/
-          - name: GEOSERVER_LOCATION
-            value: http://{{ .Values.ingress.hosts | first }}/geoserver/
-          - name: SITEURL
-            value: http://{{ .Values.ingress.hosts | first }}/
-          {{- end}}
-          - name: SIMULATION_BUCKET
-            value: '{{ .Values.simulation.location }}'
-          - name: USER_SIMULATION_BUCKET
-            value: '{{ .Values.simulation.path }}'
           resources:
 {{ toYaml .Values.resources | indent 12 }}
         - name: {{ .Chart.Name }}-celary
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
           command: ["/celary.sh"]
+          envFrom:
+          - configMapRef:
+              name: {{ template "fullname" . }}-env
           env:
-          - name: DJANGO_SETTINGS_MODULE
-            value: njcoast.settings
-          - name: DATABASE_USER
-            value: {{ default "postgres" .Values.postgresql.postgresUser | quote }}
           - name: DATABASE_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: {{ .Release.Name }}-postgresql
                 key: postgres-password
-          - name: DATABASE_HOST
-            value: "{{ .Release.Name }}-postgresql"
-          - name: DATABASE_PORT
-            value: {{ default 5432 .Values.postgresql.service.port | quote }}
-          - name: DATABASE_NAME
-            value: {{ default "postgres" .Values.postgresql.postgresDatabase | quote }}
-          - name: ALLOWED_HOSTS
-            value: '[''django'',]'
-          - name: C_FORCE_ROOT
-            value: "1"
-          {{- if .Values.ingress.tls }}
-          - name: GEOSERVER_PUBLIC_LOCATION
-            value: httsp://{{ .Values.ingress.hosts | first }}/geoserver/
-          - name: GEOSERVER_LOCATION
-            value: https://{{ .Values.ingress.hosts | first }}/geoserver/
-          - name: SITEURL
-            value: https://{{ .Values.ingress.hosts | first }}/
-          {{- else}}
-          - name: GEOSERVER_PUBLIC_LOCATION
-            value: http://{{ .Values.ingress.hosts | first }}/geoserver/
-          - name: GEOSERVER_LOCATION
-            value: http://{{ .Values.ingress.hosts | first }}/geoserver/
-          - name: SITEURL
-            value: http://{{ .Values.ingress.hosts | first }}/
-          {{- end}}
-          - name: BROKER_USER
-            value: {{ default "user" .Values.rabbitmq.rabbitmqUsername | quote }}
           - name: BROKER_PASS
             valueFrom:
               secretKeyRef:
                 name: {{ .Release.Name }}-rabbitmq
                 key: rabbitmq-password
-          - name: BROKER_HOST
-            value: "{{ .Release.Name }}-rabbitmq"
-          - name: BROKER_PORT
-            value: {{ default 5672 .Values.rabbitmq.rabbitmqNodePort | quote }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
       volumes:
