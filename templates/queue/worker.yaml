@@ -46,7 +46,7 @@ spec:
               name: {{ template "fullname" . }}-aws
               key: AWS_SECRET_ACCESS_KEY
         - name: SERVER_HOSTNAME
-          value: {{ .Values.ingress.hosts | first }}
+          value: {{ template "fullname" . }}-queue-master:9090
         - name: POD_NAME
           valueFrom:
             fieldRef:
