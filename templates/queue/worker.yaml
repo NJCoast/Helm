@@ -30,11 +30,13 @@ spec:
             secretKeyRef:
               name: {{ template "fullname" . }}-aws
               key: USER_NAME
+              optional: true
         - name: HTTP_PASS
           valueFrom:
             secretKeyRef:
               name: {{ template "fullname" . }}-aws
               key: USER_PASS
+              optional: true
         - name: AWS_ACCESS_KEY_ID
           valueFrom:
             secretKeyRef:
