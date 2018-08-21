@@ -1,3 +1,4 @@
+{{- if .Values.grabber.enabled }}
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
@@ -33,3 +34,4 @@ spec:
                 secretKeyRef:
                   name: {{ template "fullname" . }}-aws
                   key: AWS_SECRET_ACCESS_KEY
+{{- end }}

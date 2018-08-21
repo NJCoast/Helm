@@ -49,6 +49,7 @@ simulation:
   path: "simulation"
 
 stormgrabber:
+  enabled: false
   image:
       repository: stormgrabber
       tag: latest
