@@ -67,7 +67,11 @@ spec:
         - name: uploads
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
+          {{- if .Values.persistence.existingClaim }}
             claimName: {{ .Values.persistence.existingClaim }}
+          {{- else }}
+            claimName: {{ template "fullname" . }}-uploads
+          {{- end }}
         {{- else }}
           emptyDir: {}
         {{- end }}

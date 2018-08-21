@@ -9,9 +9,6 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  selector:
-    matchLabels:
-      app: {{ template "fullname" . }}-uploads
   accessModes:
     - {{ .Values.persistence.accessMode | quote }}
   resources:
