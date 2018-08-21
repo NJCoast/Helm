@@ -47,7 +47,13 @@ smtp:
 simulation:
   location: "https://s3.amazonaws.com/simulation.njcoast.us"
   path: "simulation"
-  
+
+stormgrabber:
+  image:
+      repository: stormgrabber
+      tag: latest
+      pullPolicy: Always
+
 queue:
   image:
     repository: simulation-queue
