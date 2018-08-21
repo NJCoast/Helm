@@ -40,10 +40,14 @@ aws:
   id: "AWSID"
   key: "AWSKEY"
 
+smtp:
+  username: "USERNAME"
+  password: "Password"
+
 simulation:
   location: "https://s3.amazonaws.com/simulation.njcoast.us"
   path: "simulation"
-
+  
 queue:
   image:
     repository: simulation-queue
