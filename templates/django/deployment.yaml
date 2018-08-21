@@ -41,6 +41,18 @@ spec:
               secretKeyRef:
                 name: {{ .Release.Name }}-postgresql
                 key: postgres-password
+          - name: SMTP_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "fullname" . }}-django
+                key: SMTP_USERNAME
+                optional: true
+          - name: SMTP_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "fullname" . }}-django
+                key: SMTP_PASSWORD
+                optional: true
           resources:
 {{ toYaml .Values.resources | indent 12 }}
         - name: {{ .Chart.Name }}-celary
