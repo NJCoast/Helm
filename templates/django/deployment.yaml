@@ -29,6 +29,9 @@ spec:
           volumeMounts:
           - name: uploads
             mountPath: /usr/local/src/geonode/geonode/uploaded
+          - name: sitename-fixture
+            mountPath: /app/njcoast/fixtures/sitename.yaml
+            subPath: sitename.yaml
           envFrom:
           - configMapRef:
               name: {{ template "fullname" . }}-env
@@ -68,3 +71,6 @@ spec:
         {{- else }}
           emptyDir: {}
         {{- end }}
+        - name: sitename-fixture
+          configMap:
+             name: {{ template "fullname" . }}-data

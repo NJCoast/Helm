@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}-data
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  sitename.yaml: |-
+    - model: sites.Site
+      pk: 1
+      fields:
+        domain: {{ .Values.ingress.hosts | first }}
+        name: NJCoast 
