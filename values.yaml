@@ -112,6 +112,10 @@ geoserver:
     accessMode: ReadWriteOnce
     size: 1Gi
 
+  security:
+    username: admin
+    password: geoserver
+
 postgresql:
   image: "postgres"
   imageTag: "9.6.2"

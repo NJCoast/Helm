@@ -53,6 +53,18 @@ spec:
                 name: {{ template "fullname" . }}-django
                 key: SMTP_PASSWORD
                 optional: true
+          - name: GEOSERVER_ADMIN_USER
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "fullname" . }}-django
+                key: GEOSERVER_ADMIN_USER
+                optional: true
+          - name: GEOSERVER_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "fullname" . }}-django
+                key: GEOSERVER_ADMIN_PASSWORD
+                optional: true
           resources:
 {{ toYaml .Values.resources | indent 12 }}
         - name: {{ .Chart.Name }}-celary
@@ -73,6 +85,18 @@ spec:
               secretKeyRef:
                 name: {{ .Release.Name }}-rabbitmq
                 key: rabbitmq-password
+          - name: GEOSERVER_ADMIN_USER
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "fullname" . }}-django
+                key: GEOSERVER_ADMIN_USER
+                optional: true
+          - name: GEOSERVER_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "fullname" . }}-django
+                key: GEOSERVER_ADMIN_PASSWORD
+                optional: true
           resources:
 {{ toYaml .Values.resources | indent 12 }}
       volumes:
