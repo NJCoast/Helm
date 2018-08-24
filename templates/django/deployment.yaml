@@ -41,6 +41,11 @@ spec:
               secretKeyRef:
                 name: {{ .Release.Name }}-postgresql
                 key: postgres-password
+          - name: BROKER_PASS
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-rabbitmq
+                key: rabbitmq-password
           - name: SMTP_USERNAME
             valueFrom:
               secretKeyRef:
