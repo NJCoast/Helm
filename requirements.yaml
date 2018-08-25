@@ -3,5 +3,5 @@ dependencies:
   version: 0.8.3
   repository: https://kubernetes-charts.storage.googleapis.com/
 - name: rabbitmq
-  version: 0.6.8
+  version: 2.1.2
   repository: https://kubernetes-charts.storage.googleapis.com/

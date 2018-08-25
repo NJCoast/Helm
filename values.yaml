@@ -145,9 +145,10 @@ postgresql:
     port: 5432
 
 rabbitmq:
-  rabbitmqUsername: user
-  rabbitmqPassword: test
-  rabbitmqNodePort: 5672
+  rabbitmq:
+    username: user
+    password: test
+    nodePort: 5672
 
   serviceType: ClusterIP
 

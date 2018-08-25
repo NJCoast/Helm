@@ -26,6 +26,6 @@ data:
   {{- end}}
   SIMULATION_BUCKET: '{{ .Values.simulation.location }}'
   USER_SIMULATION_BUCKET: '{{ .Values.simulation.path }}'
-  BROKER_USER: {{ default "user" .Values.rabbitmq.rabbitmqUsername | quote }}
+  BROKER_USER: {{ default "user" .Values.rabbitmq.rabbitmq.username | quote }}
   BROKER_HOST: "{{ .Release.Name }}-rabbitmq"
-  BROKER_PORT: {{ default 5672 .Values.rabbitmq.rabbitmqNodePort | quote }}
+  BROKER_PORT: {{ default 5672 .Values.rabbitmq.rabbitmq.nodePort | quote }}
