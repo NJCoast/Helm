@@ -36,6 +36,17 @@ persistence:
   size: 5Gi
   # existingClaim:
 
+celery:
+  replicaCount: 1
+  
+  resources: {}
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+
 aws:
   id: "AWSID"
   key: "AWSKEY"

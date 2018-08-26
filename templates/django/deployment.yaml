@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ template "fullname" . }}-django
   labels:
-    app: {{ template "name" . }}-django
+    app: {{ template "name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -20,7 +20,7 @@ spec:
         - name: {{ .Values.image.secret }}
       {{- end }}
       containers:
-        - name: {{ .Chart.Name }}-django
+        - name: django
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
           command: ["/entrypoint.sh"]
@@ -58,38 +58,6 @@ spec:
                 name: {{ template "fullname" . }}-django
                 key: SMTP_PASSWORD
                 optional: true
-          - name: GEOSERVER_ADMIN_USER
-            valueFrom:
-              secretKeyRef:
-                name: {{ template "fullname" . }}-django
-                key: GEOSERVER_ADMIN_USER
-                optional: true
-          - name: GEOSERVER_ADMIN_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: {{ template "fullname" . }}-django
-                key: GEOSERVER_ADMIN_PASSWORD
-                optional: true
-          resources:
-{{ toYaml .Values.resources | indent 12 }}
-        - name: {{ .Chart.Name }}-celary
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ default "" .Values.imagePullPolicy | quote }}
-          command: ["/celary.sh"]
-          envFrom:
-          - configMapRef:
-              name: {{ template "fullname" . }}-env
-          env:
-          - name: DATABASE_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: {{ .Release.Name }}-postgresql
-                key: postgres-password
-          - name: BROKER_PASS
-            valueFrom:
-              secretKeyRef:
-                name: {{ .Release.Name }}-rabbitmq
-                key: rabbitmq-password
           - name: GEOSERVER_ADMIN_USER
             valueFrom:
               secretKeyRef:
