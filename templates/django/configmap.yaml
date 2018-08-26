@@ -14,6 +14,7 @@ data:
   DATABASE_PORT: {{ default 5432 .Values.postgresql.service.port | quote }}
   DATABASE_NAME: {{ default "postgres" .Values.postgresql.postgresDatabase | quote }}
   ALLOWED_HOSTS: '[''*'',]'
+  DEBUG: {{ default "True" .Values.debug | quote }}
   C_FORCE_ROOT: "1"
   {{- if .Values.ingress.tls }}
   GEOSERVER_PUBLIC_LOCATION: https://{{ .Values.ingress.hosts | first }}/geoserver/

@@ -58,6 +58,9 @@ worker:
   #  cpu: 100m
   #  memory: 128Mi
 
+debug: "true"
+secretKey: "myv-y4#7j-d*p-__@j#*3z@!y24fz8%^z2v6atuy4bo9vqr1_a"
+
 aws:
   id: "AWSID"
   key: "AWSKEY"

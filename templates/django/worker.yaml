@@ -38,6 +38,11 @@ spec:
               secretKeyRef:
                 name: {{ .Release.Name }}-rabbitmq
                 key: rabbitmq-password
+          - name: SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "fullname" . }}-django
+                key: SECRET_KEY
           - name: SMTP_USERNAME
             valueFrom:
               secretKeyRef:

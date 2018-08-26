@@ -28,10 +28,44 @@ spec:
           - configMapRef:
               name: {{ template "fullname" . }}-env
           env:
+          - name: DATABASE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-postgresql
+                key: postgres-password
           - name: BROKER_PASS
             valueFrom:
               secretKeyRef:
                 name: {{ .Release.Name }}-rabbitmq
                 key: rabbitmq-password
+          - name: SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "fullname" . }}-django
+                key: SECRET_KEY
+          - name: SMTP_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "fullname" . }}-django
+                key: SMTP_USERNAME
+                optional: true
+          - name: SMTP_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "fullname" . }}-django
+                key: SMTP_PASSWORD
+                optional: true
+          - name: GEOSERVER_ADMIN_USER
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "fullname" . }}-django
+                key: GEOSERVER_ADMIN_USER
+                optional: true
+          - name: GEOSERVER_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "fullname" . }}-django
+                key: GEOSERVER_ADMIN_PASSWORD
+                optional: true
           resources:
 {{ toYaml .Values.celery.resources | indent 12 }}
