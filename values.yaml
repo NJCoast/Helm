@@ -47,6 +47,17 @@ celery:
   #  cpu: 100m
   #  memory: 128Mi
 
+worker:
+  replicaCount: 2
+  
+  resources: {}
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+
 aws:
   id: "AWSID"
   key: "AWSKEY"
