@@ -26,7 +26,7 @@ data:
   SITEURL: http://{{ .Values.ingress.hosts | first }}/
   {{- end}}
   SIMULATION_BUCKET: '{{ .Values.simulation.location }}'
-  USER_SIMULATION_BUCKET: '{{ .Values.simulation.path }}'
+  USER_SIMULATION_BUCKET: '{{ .Values.simulation.path }}/simulation'
   BROKER_USER: {{ default "user" .Values.rabbitmq.rabbitmq.username | quote }}
   BROKER_HOST: "{{ .Release.Name }}-rabbitmq"
   BROKER_PORT: {{ default 5672 .Values.rabbitmq.rabbitmq.nodePort | quote }}

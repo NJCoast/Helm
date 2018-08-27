@@ -24,7 +24,7 @@ spec:
         image: "{{ .Values.queue.image.repository }}:{{ .Values.queue.image.tag }}"
         imagePullPolicy: {{ default "" .Values.queue.image.pullPolicy | quote }}
         command: ["/root/SimulationQueue"]
-        args: ["-n", "simulation_queue", "-f", "{{ .Values.simulation.path }}"]
+        args: ["-n", "simulation_queue", "-f", "{{ .Values.simulation.path }}/simulation"]
         resources:
 {{ toYaml .Values.queue.resources | indent 10 }}
         ports:
